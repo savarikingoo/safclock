@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Saffron's Premium Clock | Mobile Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Animated Gradient Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(125deg, 
+                rgba(255, 107, 107, 0.3),
+                rgba(78, 205, 196, 0.3),
+                rgba(255, 230, 109, 0.3),
+                rgba(198, 94, 198, 0.3));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animated Stars */
+        .star {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Floating Hearts & Shapes */
+        .floating-shape {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            animation: floatShape 12s linear infinite;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        @keyframes floatShape {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Animated Rainbow Border */
+        @keyframes borderPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7),
+                            0 0 0 5px rgba(255, 215, 0, 0.3),
+                            0 0 0 10px rgba(255, 140, 0, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.7),
+                            0 0 0 15px rgba(255, 215, 0, 0.3),
+                            0 0 0 20px rgba(255, 140, 0, 0.1);
+            }
+        }
+
+        /* Main Clock Container */
+        .clock-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            border-radius: 45px;
+            padding: 25px 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+                        0 0 0 1px rgba(255, 255, 255, 0.3),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            animation: slideIn 0.6s ease-out;
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Saffron's Signature Badge */
+        .signature {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00, #ff6b6b);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: glowPulse 2s infinite, bounce 2s ease-in-out infinite;
+            z-index: 20;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                box-shadow: 0 5px 25px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* Time Display */
+        .time {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #ffe6f0, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 4px;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+            font-family: 'Courier New', monospace;
+            animation: textGlow 2s ease-in-out infinite alternate;
+            word-break: keep-all;
+        }
+
+        @keyframes textGlow {
+            from {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+            to {
+                text-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        /* Date Display */
+        .date {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* Day Highlight */
+        .day-highlight {
+            display: inline-block;
+            animation: dayPulse 1s ease-in-out infinite;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        @keyframes dayPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Controls Panel */
+        .controls {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: white;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn.active {
+            background: #fff;
+            color: #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Theme Selector */
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .theme-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .theme-btn:active {
+            transform: scale(0.9);
+        }
+
+        .theme-btn.active-theme {
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            transform: scale(1.1);
+            animation: spin 0.5s ease;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Greeting */
+        .greeting {
+            margin: 15px 0;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 600;
+            animation: greetingFade 3s ease-in-out infinite;
+        }
+
+        @keyframes greetingFade {
+            0%, 100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.02);
+            }
+        }
+
+        /* Day Progress */
+        .day-progress {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ff8c00, #ff6b6b);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            animation: shimmer 2s infinite;
+            background-size: 200% 100%;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        /* Weather Widget */
+        .weather-widget {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .weather-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Quote Section */
+        .quote-section {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-style: italic;
+            animation: fadeIn 2s;
+            line-height: 1.4;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Touch-friendly adjustments */
+        @media (max-width: 480px) {
+            .clock-container {
+                padding: 20px 15px;
+                border-radius: 35px;
+            }
+            
+            .time {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+            
+            .btn {
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+            
+            .theme-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .signature {
+                font-size: 0.65rem;
+                padding: 5px 12px;
+                top: -10px;
+                right: -10px;
+            }
+            
+            .greeting {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Shapes Container -->
+    <div id="shapesContainer"></div>
+    <div id="starsContainer"></div>
+
+    <div class="clock-container" id="clockContainer">
+        <!-- Saffron's Signature -->
+        <div class="signature">
+            🌸 Saffron's Magic Clock 🌸
+        </div>
+        
+        <div class="time" id="timeDisplay">
+            00:00:00
+        </div>
+        <div class="date" id="dateDisplay">
+            Loading...
+        </div>
+        
+        <div class="controls">
+            <button class="btn" id="format12Btn">🕐 12H</button>
+            <button class="btn" id="format24Btn">🕐 24H</button>
+            <button class="btn" id="showSecondsBtn">⏱️ Sec</button>
+            <button class="btn" id="hideSecondsBtn">⏱️ Hide</button>
+        </div>
+        
+        <div class="theme-selector" id="themeSelector">
+            <div class="theme-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" data-theme="default" title="Purple Dream"></div>
+            <div class="theme-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" data-theme="sunset" title="Sunset"></div>
+            <div class="theme-btn" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" data-theme="ocean" title="Ocean"></div>
+            <div class="theme-btn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" data-theme="forest" title="Forest"></div>
+            <div class="theme-btn" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" data-theme="warm" title="Warm"></div>
+            <div class="theme-btn" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);" data-theme="dream" title="Dream"></div>
+            <div class="theme-btn" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);" data-theme="cotton" title="Cotton Candy"></div>
+        </div>
+        
+        <div class="greeting" id="greeting"></div>
+        
+        <!-- Day Progress Bar -->
+        <div class="day-progress">
+            <div class="progress-label">
+                <span>🌅 Day Progress</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <!-- Weather Widget (Removed wind speed) -->
+        <div class="weather-widget">
+            <div class="weather-item">
+                <span>🌡️</span>
+                <span id="temperature">22°C</span>
+            </div>
+            <div class="weather-item">
+                <span>💧</span>
+                <span id="humidity">65%</span>
+            </div>
+            <div class="weather-item">
+                <span>☀️</span>
+                <span id="condition">Sunny</span>
+            </div>
+        </div>
+        
+        <!-- Inspirational Quote -->
+        <div class="quote-section" id="quote">
+            "Time is the most valuable thing you can spend"
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const timeDisplay = document.getElementById('timeDisplay');
+        const dateDisplay = document.getElementById('dateDisplay');
+        const greetingElement = document.getElementById('greeting');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        
+        // State variables
+        let is24Hour = true;
+        let showSeconds = true;
+        
+        // Quotes Array
+        const quotes = [
+            "⏰ Time is what we want most, but what we use worst",
+            "✨ The future starts today, not tomorrow",
+            "🌟 Every second is a chance to turn your life around",
+            "💫 Time flies over us, but leaves its shadow behind",
+            "⭐ Don't watch the clock; do what it does. Keep going",
+            "🌙 Time is free, but it's priceless",
+            "☀️ Make each day your masterpiece",
+            "🎯 The key is not in spending time, but in investing it",
+            "🌸 Every moment is a fresh beginning",
+            "💖 Time you enjoy wasting is not wasted time"
+        ];
+        
+        // Weather conditions
+        const conditions = ["☀️ Sunny", "⛅ Partly Cloudy", "🌤️ Mostly Sunny", "🌈 Beautiful", "✨ Clear Sky", "💫 Magical"];
+        
+        // Themes
+        const themes = {
+            default: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            sunset: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            ocean: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            forest: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            warm: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            dream: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+            cotton: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'
+        };
+        
+        // Create floating shapes (hearts, stars, sparkles)
+        function createFloatingShapes() {
+            const shapesContainer = document.getElementById('shapesContainer');
+            const shapes = ['✨', '⭐', '🌟', '💫', '🌸', '💖', '🎀', '💝', '🌺', '🦋'];
+            
+            for (let i = 0; i < 30; i++) {
+                const shape = document.createElement('div');
+                shape.classList.add('floating-shape');
+                shape.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                shape.style.left = `${Math.random() * 100}%`;
+                shape.style.fontSize = `${Math.random() * 15 + 10}px`;
+                shape.style.animationDuration = `${Math.random() * 10 + 8}s`;
+                shape.style.animationDelay = `${Math.random() * 5}s`;
+                shapesContainer.appendChild(shape);
+            }
+        }
+        
+        // Create stars
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDuration = `${Math.random() * 3 + 1}s`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Apply theme
+        function applyTheme(themeName) {
+            document.body.style.background = themes[themeName];
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active-theme');
+                if (btn.getAttribute('data-theme') === themeName) {
+                    btn.classList.add('active-theme');
+                }
+            });
+            localStorage.setItem('clockTheme', themeName);
+        }
+        
+        // Load saved theme
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('clockTheme');
+            if (savedTheme && themes[savedTheme]) {
+                applyTheme(savedTheme);
+            } else {
+                applyTheme('default');
+            }
+        }
+        
+        // Format time
+        function formatTime(date, is24HourFormat, includeSeconds) {
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            let ampm = '';
+            
+            if (!is24HourFormat) {
+                ampm = hours >= 12 ? ' PM' : ' AM';
+                hours = hours % 12;
+                hours = hours === 0 ? 12 : hours;
+            }
+            
+            const hoursStr = String(hours).padStart(2, '0');
+            
+            if (includeSeconds) {
+                return `${hoursStr}:${minutes}:${seconds}${ampm}`;
+            } else {
+                return `${hoursStr}:${minutes}${ampm}`;
+            }
+        }
+        
+        // Format date
+        function formatDate(date) {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            const dayName = days[date.getDay()];
+            const month = months[date.getMonth()];
+            const day = date.getDate();
+            const year = date.getFullYear();
+            
+            const ordinal = (n) => {
+                if (n > 3 && n < 21) return 'th';
+                switch (n % 10) {
+                    case 1: return 'st';
+                    case 2: return 'nd';
+                    case 3: return 'rd';
+                    default: return 'th';
+                }
+            };
+            
+            return `<span class="day-highlight">${dayName}</span>, ${month} ${day}${ordinal(day)}, ${year}`;
+        }
+        
+        // Get greeting
+        function getGreeting(hours) {
+            if (hours >= 5 && hours < 12) return '🌅 Good Morning, Saffron! Have a magical day! ✨';
+            if (hours >= 12 && hours < 17) return '☀️ Good Afternoon, Saffron! Stay productive and shine! 💫';
+            if (hours >= 17 && hours < 21) return '🌤️ Good Evening, Saffron! Time to relax and unwind! 🌙';
+            return '🌙 Good Night, Saffron! Sweet dreams and rest well! ⭐';
+        }
+        
+        // Update day progress
+        function updateDayProgress() {
+            const now = new Date();
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const elapsed = now - startOfDay;
+            const totalDay = 24 * 60 * 60 * 1000;
+            const percentage = (elapsed / totalDay) * 100;
+            progressFill.style.width = `${percentage}%`;
+            progressPercent.textContent = `${Math.round(percentage)}%`;
+        }
+        
+        // Update weather
+        function updateWeather() {
+            const temperatures = [18, 20, 22, 23, 25, 26, 28];
+            const humidities = [55, 60, 65, 70, 45, 50];
+            
+            const randomIndex = Math.floor(Math.random() * temperatures.length);
+            document.getElementById('temperature').textContent = `${temperatures[randomIndex]}°C`;
+            document.getElementById('humidity').textContent = `${humidities[randomIndex % humidities.length]}%`;
+            document.getElementById('condition').textContent = conditions[Math.floor(Math.random() * conditions.length)];
+        }
+        
+        // Update quote
+        function updateQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quote').textContent = randomQuote;
+        }
+        
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            
+            timeDisplay.textContent = formatTime(now, is24Hour, showSeconds);
+            dateDisplay.innerHTML = formatDate(now);
+            greetingElement.textContent = getGreeting(hours);
+            updateDayProgress();
+        }
+        
+        // Event listeners (touch-friendly)
+        document.getElementById('format12Btn').addEventListener('click', () => {
+            is24Hour = false;
+            updateClock();
+            document.getElementById('format12Btn').classList.add('active');
+            document.getElementById('format24Btn').classList.remove('active');
+            localStorage.setItem('clockFormat', '12');
+        });
+        
+        document.getElementById('format24Btn').addEventListener('click', () => {
+            is24Hour = true;
+            updateClock();
+            document.getElementById('format24Btn').classList.add('active');
+            document.getElementById('format12Btn').classList.remove('active');
+            localStorage.setItem('clockFormat', '24');
+        });
+        
+        document.getElementById('showSecondsBtn').addEventListener('click', () => {
+            showSeconds = true;
+            updateClock();
+            localStorage.setItem('showSeconds', 'true');
+        });
+        
+        document.getElementById('hideSecondsBtn').addEventListener('click', () => {
+            showSeconds = false;
+            updateClock();
+            localStorage.setItem('showSeconds', 'false');
+        });
+        
+        // Theme buttons
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const theme = btn.getAttribute('data-theme');
+                applyTheme(theme);
+            });
+        });
+        
+        // Load preferences
+        function loadPreferences() {
+            const savedFormat = localStorage.getItem('clockFormat');
+            if (savedFormat === '12') {
+                is24Hour = false;
+                document.getElementById('format12Btn').classList.add('active');
+            } else {
+                is24Hour = true;
+                document.getElementById('format24Btn').classList.add('active');
+            }
+            
+            const savedSeconds = localStorage.getItem('showSeconds');
+            if (savedSeconds === 'false') {
+                showSeconds = false;
+            } else {
+                showSeconds = true;
+            }
+            
+            loadSavedTheme();
+        }
+        
+        // Initialize
+        function init() {
+            createStars();
+            createFloatingShapes();
+            loadPreferences();
+            updateClock();
+            updateWeather();
+            updateQuote();
+            setInterval(updateClock, 1000);
+            setInterval(updateWeather, 30000);
+            setInterval(updateQuote, 10000);
+        }
+        
+        init();
+    </script>
+</body>
+</html>
